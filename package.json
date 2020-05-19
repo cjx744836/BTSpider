@@ -6,23 +6,19 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/alanyang/dhtspider.git"
-  },
   "keywords": [
     "bittorrent",
     "dht",
     "spider",
     "crawler"
   ],
-  "author": "Alan Yang",
+  "author": "cc",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/alanyang/dhtspider/issues"
-  },
-  "homepage": "https://github.com/alanyang/dhtspider#readme",
   "dependencies": {
-    "bencode": "^0.9.0"
+    "bencode": "^0.9.0",
+    "bitfield": "^3.0.0",
+    "bncode": "^0.5.3",
+    "mysql": "^2.18.1",
+    "utp": "^0.0.10"
   }
 }

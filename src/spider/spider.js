@@ -26,6 +26,8 @@ class Spider extends Emiter {
     constructor() {
         super()
         const options = arguments.length? arguments[0]: {}
+        this.joinInterval = 0;
+        this.walkTimeout = 0;
         this.udp = dgram.createSocket('udp4')
         this.table = new Table(options.tableCaption || 600)
         this.bootstraps = options.bootstraps || bootstraps
@@ -35,6 +37,12 @@ class Spider extends Emiter {
     send(message, address) {
         const data = bencode.encode(message)
         this.udp.send(data, 0, data.length, address.port, address.address)
+    }
+
+    destroy() {
+        this.walkTimeout && clearTimeout(this.walkTimeout)
+        this.joinInterval && clearInterval(this.joinInterval)
+        this.udp.close()
     }
 
     findNode(id, address) {
@@ -61,7 +69,7 @@ class Spider extends Emiter {
         if (node) {
         	this.findNode(Node.neighbor(node.id, this.table.id), {address: node.address, port: node.port})
         }
-        setTimeout(()=>this.walk(), 2)
+        this.walkTimeout = setTimeout(()=>this.walk(), 2)
     }
 
     onFoundNodes(data) {
@@ -107,8 +115,7 @@ class Spider extends Emiter {
                 token: this.token.token
             }
         }, address)
-
-        this.emit('unensureHash', infohash.toString('hex').toUpperCase())
+        this.emit('unensureHash', infohash)
     }
 
     onAnnouncePeerRequest(message, address) {
@@ -122,7 +129,7 @@ class Spider extends Emiter {
 
         this.send({ t: tid, y: 'r', r: { id: Node.neighbor(id, this.table.id) } }, address)
 
-    	this.emit('ensureHash', infohash.toString('hex').toUpperCase(), {
+    	this.emit('ensureHash', infohash, {
             address: address.address,
             port: port
         })
@@ -164,7 +171,7 @@ class Spider extends Emiter {
             this.parse(data, addr)
         })
         this.udp.on('error', (err) => {})
-        setInterval(() => this.join(), 3000)
+        this.joinInterval = setInterval(() => this.join(), 1000)
         this.join()
         this.walk()
     }
