@@ -1,0 +1,24 @@
+<div id="app">
+    <div class="logo"></div>
+    <div class="search">
+        <input type="text" :value="value" placeholder="输入关键词"><button>搜索</button>
+    </div>
+    <div class="search-list">
+        <div v-if="list.length===0">无结果</div>
+        <div class="search-item" v-for="(k,i) in list" v-else>
+            <div class="search-item-name">
+                <a :href="'/detail.html?hash='+k.id" target="_blank" v-html="filterKeyword(k.name)"></a>
+                <i>{{k.filesize}}</i>
+            </div>
+            <div>{{formatTime(k.create_time)}}</div>
+        </div>
+    </div>
+    <div class="page" v-if="total">
+        <span :class="{disabled:page===1}" v-html="pager.prev"></span>
+        <span :class="{disabled:page===1,active:page===1}" v-html="pager.first"></span>
+        <span v-for="k in pageList" v-html="k.content" :class="{active:page===k.page}"></span>
+        <span :class="{disabled:page===last,active:page===last}" v-html="pager.last" v-if="last!==1"></span>
+        <span :class="{disabled:page===last}" v-html="pager.next"></span>
+        <label>共{{total}}条</label>
+    </div>
+</div>

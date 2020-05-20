@@ -1,0 +1,24 @@
+<div id="app">
+    <div class="logo"></div>
+    <div class="detail">
+        <div class="detail-info">
+            <div>名称</div>
+            <div>{{name}}</div>
+        </div>
+        <div class="detail-info">
+            <div>文件大小</div>
+            <div>{{filesize}}</div>
+        </div>
+        <div class="detail-info">
+            <div>磁链接</div>
+            <div><a :href="magnet">{{magnet}}</a></div>
+        </div>
+        <div class="detail-list" v-if="filelist">
+            <div class="detail-list-title">文件列表</div>
+            <div class="detail-item" v-for="(k,i) in filelist">
+                <div>{{k.name}}</div>
+                <div>{{k.size}}</div>
+            </div>
+        </div>
+    </div>
+</div>
