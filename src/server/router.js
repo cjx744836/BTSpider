@@ -11,7 +11,12 @@ function createApp(options) {
 
 function index(req, res, context) {
     let app = createApp({
-        template: utils.getFile('./view/index.html')
+        template: utils.getFile('./view/index.html'),
+        components: {
+            'c-top': {
+                template: utils.getFile('./components/toper.html')
+            }
+        }
     });
     context.js = '<script src="/js/index.js" type="text/javascript"></script>'
     renderer.renderToString(app, context, (err, html) => {
@@ -19,12 +24,28 @@ function index(req, res, context) {
     });
 }
 
+function latest(req, res, options) {
+    options = Object.assign(options, {
+        template: utils.getFile('./view/latest.html'),
+        methods: {
+            formatTime(k) {
+                return utils.formatTime(k);
+            }
+        }
+    });
+    let app = createApp(options);
+    renderer.renderToString(app, {title: options.title, js: ''}, (err, html) => {
+        if(err) return res.redirect('/');
+        res.end(html);
+    })
+}
+
 function search(req, res, options) {
     let defs = {
         template: utils.getFile('./view/search.html'),
         data: Object.assign({
             pageList: [],
-            path: `/search?key=${req.query.key}`,
+            path: `/search?key=${encodeURIComponent(req.query.key)}`,
             last: Math.ceil(options.data.total / 20),
             pager: {
                 prev: '',
@@ -34,9 +55,14 @@ function search(req, res, options) {
             }
         }, options.data),
         created() {
-            let key = this.value.split(' ').filter(d => d.length).join('|');
+            let key = this.value.split(' ').filter(d => d.length).map(d => d.replace(/([\*\?\|\+\[\]\{\}\(\)\^\$\&\#\\\/\.])/,'\\$1')).join('|');
             this.reg = new RegExp(`(${key})`, 'gi');
             this.genPage();
+        },
+        components: {
+            'c-top': {
+                template: utils.getFile('./components/toper.html')
+            }
         },
         methods: {
             genPage() {
@@ -134,5 +160,6 @@ function detail(req, res, options) {
 module.exports = {
     search,
     index,
+    latest,
     detail
 };

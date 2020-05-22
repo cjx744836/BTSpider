@@ -14,11 +14,12 @@ app.get('/', (req, res) => {
 
 app.get('/search', (req, res) => {
     if(req.query.key) {
-        let key = req.query.key.split(' ').filter(d => d.length).join('|');
+        req.query.key = decodeURIComponent(req.query.key);
+        let key = req.query.key.split(' ').filter(d => d.length).map(d => `name like '%${d}%'`).join(' or ');
         let page = isNaN(req.query.page) ? 1 : (Number(req.query.page) || 1);
         let size = 20;
         let start = (page - 1) * size;
-        let sql = `select sql_calc_found_rows * from m_hash where name regexp '${key}' order by create_time desc limit ${start},${size}`;
+        let sql = `select sql_calc_found_rows * from m_hash where ${key} order by create_time desc limit ${start},${size}`;
         let options = {data: {}};
         mysql.query(sql, (err, results) => {
             if(err) return res.redirect('/');
@@ -36,6 +37,14 @@ app.get('/search', (req, res) => {
     } else {
         res.redirect('/');
     }
+});
+
+app.get('/latest', (req, res) => {
+   let sql = `select * from m_hash order by create_time desc limit 0, 100`;
+   mysql.query(sql, (err, results) => {
+       if(err) return res.redirect('/');
+       router.latest(req, res, {title: '最新100 - Bt Search', data: {list: results}});
+   })
 });
 
 app.get('/detail.html', (req, res) => {

@@ -9,8 +9,8 @@ var bencode = require('bencode');
 
 var utils = require('./utils');
 
-var BT_RESERVED = new Buffer([0x00, 0x00, 0x00, 0x00, 0x00, 0x10, 0x00, 0x01]);
-var BT_PROTOCOL = new Buffer('BitTorrent protocol');
+var BT_RESERVED = Buffer.from([0x00, 0x00, 0x00, 0x00, 0x00, 0x10, 0x00, 0x01]);
+var BT_PROTOCOL = Buffer.from('BitTorrent protocol');
 var PIECE_LENGTH = Math.pow(2, 14);
 var MAX_METADATA_SIZE = 10000000;
 var BITFIELD_GROW = 1000;

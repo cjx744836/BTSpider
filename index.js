@@ -1,14 +1,12 @@
 'use strict';
 
-const spider = new (require('./src/spider/spider'));
+const SPider = require('./src/spider/spider');
 const BTClient = require('./src/btclient/btclient');
 const save = require('./src/mysql/index');
 const PORT = 6339;
 
-let btClient = new BTClient({
-    timeout: 10000,
-    maxConnections: 50
-});
+let btClient = new BTClient();
+let spider = new SPider();
 
 spider.on('ensureHash', (infohash, address) => {
     btClient.add(address, infohash);

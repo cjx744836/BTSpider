@@ -10,8 +10,8 @@ var Wire = require('./wire');
 
 var BTClient = function(options) {
     EventEmitter.call(this);
-
-    this.timeout = options.timeout;
+    options = Object.assign({}, options);
+    this.timeout = options.timeout || 5000;
     this.maxConnections = options.maxConnections || 200;
     this.activeConnections = 0;
     this.peers = new PeerQueue(this.maxConnections);
@@ -46,7 +46,7 @@ BTClient.prototype._download = function(rinfo, infohash) {
     var successful = false;
     var socket = new net.Socket();
 
-    socket.setTimeout(this.timeout || 5000);
+    socket.setTimeout(this.timeout);
     socket.connect(rinfo.port, rinfo.address, function() {
         var wire = new Wire(infohash);
         socket.pipe(wire).pipe(socket);

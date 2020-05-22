@@ -8,8 +8,17 @@ html, body {
 #app {
   text-align: center;
 }
-#app .search input {
-  width: 50%;
+#app .search {
+  width: 60%;
+  margin: auto;
+  transition-duration: 0.3s;
+}
+#app .search .search-input {
+  font-size: 0;
+  display: flex;
+}
+#app .search .search-input input {
+  flex: 1 1 auto;
   border-radius: 5px;
   font-size: 16px;
   border: 1px solid #666666;
@@ -21,8 +30,11 @@ html, body {
   border-bottom-right-radius: 0;
   border-top-right-radius: 0;
   vertical-align: middle;
+  z-index: 2;
+  position: relative;
 }
-#app .search button {
+#app .search .search-input button {
+  flex-shrink: 0;
   height: 40px;
   line-height: 40px;
   border: 1px solid #666;
@@ -33,11 +45,20 @@ html, body {
   font-size: 16px;
   border-bottom-right-radius: 5px;
   background: #fff;
+  margin-left: -2px;
+  z-index: 1;
+  position: relative;
 }
 
 .search-list {
   width: 80%;
   margin: 30px auto;
+}
+.search-list .search-item:first-child {
+  border-top: none;
+}
+.search-list .search-item:first-child:hover {
+  background: inherit;
 }
 .search-list .search-item {
   width: 100%;
@@ -45,6 +66,14 @@ html, body {
   text-align: left;
   border-top: 1px solid #eee;
   padding: 8px 0;
+  word-break: break-word;
+}
+.search-list .search-item.bold {
+  font-weight: bold;
+}
+.search-list .search-item .search-item-link {
+  width: 80px;
+  flex-shrink: 0;
 }
 .search-list .search-item:hover {
   background: #eee;
@@ -62,7 +91,7 @@ html, body {
   text-decoration: none;
 }
 .search-list .search-item a:hover {
-  color: #0075ff;
+  color: #ff6259;
 }
 .search-list .search-item div {
   font-size: 15px;
@@ -75,7 +104,7 @@ html, body {
   text-align: right;
 }
 .search-list .search-item span {
-  color: red;
+  color: #ff6259;
 }
 
 .detail {
@@ -123,6 +152,9 @@ html, body {
   font-size: 14px;
   margin-right: 10px;
   flex: 0 0 auto;
+}
+.detail-info a {
+  color: #496aa7;
 }
 
 .detail-list-title {
@@ -175,4 +207,23 @@ html, body {
 .page label {
   font-size: 14px;
   margin-left: 15px;
+}
+
+.top {
+  color: #333;
+  text-align: left;
+  margin: 10px auto auto auto;
+}
+.top a {
+  color: #333;
+  text-decoration: none;
+}
+.top a:hover {
+  color: #ff6259;
+}
+
+@media screen and (max-width: 375px) {
+  #app .search {
+    width: 90%;
+  }
 }

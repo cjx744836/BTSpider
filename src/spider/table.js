@@ -12,7 +12,7 @@ class Node {
 	}
 
 	static neighbor(target, id) {
-		return Buffer.concat([target.slice(0, 6), id.slice(6)])
+		return Buffer.concat([target.slice(0, 10), id.slice(10)])
 	}
 
 	static encodeNodes(nodes) {

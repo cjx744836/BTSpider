@@ -6,6 +6,10 @@
             <div>{{name}}</div>
         </div>
         <div class="detail-info">
+            <div>文件哈希</div>
+            <div>{{id.toUpperCase()}}</div>
+        </div>
+        <div class="detail-info">
             <div>文件大小</div>
             <div>{{filesize}}</div>
         </div>
@@ -14,7 +18,7 @@
             <div><a :href="magnet">{{magnet}}</a></div>
         </div>
         <div class="detail-list" v-if="filelist">
-            <div class="detail-list-title">文件列表</div>
+            <div class="detail-list-title">文件列表 - {{filelist.length}}</div>
             <div class="detail-item" v-for="(k,i) in filelist">
                 <div>{{k.name}}</div>
                 <div>{{k.size}}</div>

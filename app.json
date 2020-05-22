@@ -1,0 +1,13 @@
+{
+  "apps":[
+    {
+      "name": "Bt Search",
+      "cwd": "./",
+      "script": "./src/server/index.js"
+    }, {
+      "name": "BTSpider",
+      "cwd": "./",
+      "script": "index.js"
+    }
+  ]
+}

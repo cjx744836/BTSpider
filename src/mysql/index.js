@@ -9,7 +9,7 @@ connection.connect();
 function save(data) {
     let sql = `insert into m_hash(id, name, filesize) value("${data.infohash}", "${data.name}", "${formatLength(data.length)}")`;
     connection.query(sql, err => {
-        if(!err && data.files.length) {
+        /*if(!err && data.files.length) {
             sql = `insert into m_file(hash, name, size) values`;
             let c = [];
             data.files.forEach(d => {
@@ -19,7 +19,7 @@ function save(data) {
             connection.query(sql, err => {
 
             })
-        }
+        }*/
     });
 }
 
