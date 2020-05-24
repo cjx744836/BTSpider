@@ -12,7 +12,6 @@ spider.on('ensure', (infohash, address) => {
     btClient.add(address, infohash);
 });
 
-
 btClient.on('complete', (metadata, infohash, rinfo) => {
     var data = {};
     data.infohash = infohash.toString('hex');

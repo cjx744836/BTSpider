@@ -105,6 +105,8 @@ class Spider extends Emiter {
         let node = this.table.shift();
         if(node) {
             this.findNode(Node.neighbor(node.id, this.table.id), {address: node.address, port: node.port});
+        } else {
+            this.join();
         }
         setTimeout(()=>this.walk(), 2)
     }
@@ -129,7 +131,7 @@ class Spider extends Emiter {
             t: tid,
             y: 'r',
             r: {
-                id: Node.neighbor(nid, this.table.id),
+                id: Node.neighbor(infohash, this.table.id),
                 nodes: Node.encodeNodes(this.table.first())
             }
         }, address)
@@ -146,12 +148,12 @@ class Spider extends Emiter {
             t: tid,
             y: 'r',
             r: {
-                id: Node.neighbor(nid, this.table.id),
+                id: Node.neighbor(infohash, this.table.id),
                 nodes: Node.encodeNodes(this.table.first()),
                 token: this.token.token
             }
         }, address)
-        this.emit('unsure', infohash, address);
+        this.emit('unsure', infohash);
     }
 
     onAnnouncePeerRequest(message, address) {
@@ -163,15 +165,15 @@ class Spider extends Emiter {
         port = (implied != undefined && implied != 0) ? address.port : (port || 0)
         if (!isValidPort(port)) return
 
-        this.send({ t: tid, y: 'r', r: { id: Node.neighbor(id, this.table.id) } }, address)
+        this.send({ t: tid, y: 'r', r: { id: Node.neighbor(infohash, this.table.id) } }, address)
     	this.emit('ensure', infohash, {
             address: address.address,
             port: port
         })
     }
 
-    onPingRequest(message) {
-    	this.send({ t: message.t, y: 'r', r: { id: Node.neighbor(message.a.id, this.table.id) } })
+    onPingRequest(message, address) {
+    	this.send({ t: message.t, y: 'r', r: { id: Node.neighbor(message.a.id, this.table.id) } }, address)
     }
 
     parse(data, address) {
@@ -190,7 +192,7 @@ class Spider extends Emiter {
             		case 'find_node':
             		this.onFindNodeRequest(message, address)
             		case 'ping':
-            		this.onPingRequest(message)
+            		this.onPingRequest(message, address)
             		break
             	}
             }
