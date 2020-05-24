@@ -131,7 +131,7 @@ class Spider extends Emiter {
             t: tid,
             y: 'r',
             r: {
-                id: Node.neighbor(nid, this.table.id),
+                id: Node.neighbor(infohash, this.table.id),
                 nodes: Node.encodeNodes(this.table.first())
             }
         }, address)
@@ -148,7 +148,7 @@ class Spider extends Emiter {
             t: tid,
             y: 'r',
             r: {
-                id: Node.neighbor(nid, this.table.id),
+                id: Node.neighbor(infohash, this.table.id),
                 nodes: Node.encodeNodes(this.table.first()),
                 token: this.token.token
             }
@@ -165,7 +165,7 @@ class Spider extends Emiter {
         port = (implied != undefined && implied != 0) ? address.port : (port || 0)
         if (!isValidPort(port)) return
 
-        this.send({ t: tid, y: 'r', r: { id: Node.neighbor(id, this.table.id) } }, address)
+        this.send({ t: tid, y: 'r', r: { id: Node.neighbor(infohash, this.table.id) } }, address)
     	this.emit('ensure', infohash, {
             address: address.address,
             port: port
