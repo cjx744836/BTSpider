@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 const port = 5557;
 const path = require('path');
-const mysql = require('./sql');
+const query = require('./sql');
 const router = require('./router');
 
 app.use(express.static(path.join(__dirname, 'public')));
@@ -21,10 +21,10 @@ app.get('/search', (req, res) => {
         let start = (page - 1) * size;
         let sql = `select sql_calc_found_rows * from m_hash where ${key} order by create_time desc limit ${start},${size}`;
         let options = {data: {}};
-        mysql.query(sql, (err, results) => {
+        query(sql, (err, results) => {
             if(err) return res.redirect('/');
             options.data.list = results;
-            mysql.query(`select found_rows() total`, (err, results) => {
+            query(`select found_rows() total`, (err, results) => {
                if(err) return res.redirect('/');
                if(!results[0].total && page > 1) return res.redirect(`/search?key=${req.query.key}`);
                options.data.total = results[0].total;
@@ -41,7 +41,7 @@ app.get('/search', (req, res) => {
 
 app.get('/latest', (req, res) => {
    let sql = `select * from m_hash order by create_time desc limit 0, 100`;
-   mysql.query(sql, (err, results) => {
+   query(sql, (err, results) => {
        if(err) return res.redirect('/');
        router.latest(req, res, {title: '最新100 - Bt Search', data: {list: results}});
    })
@@ -50,7 +50,7 @@ app.get('/latest', (req, res) => {
 app.get('/detail.html', (req, res) => {
     if(!req.query.hash) return res.redirect('/');
     let sql = `select *, (select group_concat(name,'|',size separator '|') from m_file where \`hash\`='${req.query.hash}' group by \`hash\`) filelist from m_hash where id='${req.query.hash}'`;
-    mysql.query(sql, (err, results) => {
+    query(sql, (err, results) => {
         if(err || !results[0]) return res.redirect('/');
        let optios = {
            data: Object.assign({}, results[0]),

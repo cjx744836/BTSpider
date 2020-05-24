@@ -11,7 +11,7 @@ var Wire = require('./wire');
 var BTClient = function(options) {
     EventEmitter.call(this);
     options = Object.assign({}, options);
-    this.timeout = options.timeout || 5000;
+    this.timeout = options.timeout || 10000;
     this.maxConnections = options.maxConnections || 200;
     this.activeConnections = 0;
     this.peers = new PeerQueue(this.maxConnections);

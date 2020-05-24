@@ -26,8 +26,12 @@ html, body {
         border-bottom-right-radius: 0;
         border-top-right-radius: 0;
         vertical-align: middle;
-        z-index: 2;
-        position: relative;
+        outline: 0;
+        &:focus {
+          box-shadow: 0 0 5px 0 #007bff;
+          position: relative;
+          border-color: #007bff;
+        }
       }
       button {
         flex-shrink: 0;
@@ -41,9 +45,6 @@ html, body {
         font-size: 16px;
         border-bottom-right-radius: 5px;
         background: #fff;
-        margin-left: -2px;
-        z-index: 1;
-        position: relative;
       }
     }
   }
@@ -83,10 +84,15 @@ html, body {
       font-size: 12px;
     }
     a {
-      color: #007bff;
       text-decoration: none;
+      &:link {
+        color: #007bff;
+      }
       &:hover {
         color: #ff6259;
+      }
+      &:visited {
+        color: #696565;
       }
     }
     div {

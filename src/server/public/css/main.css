@@ -30,8 +30,12 @@ html, body {
   border-bottom-right-radius: 0;
   border-top-right-radius: 0;
   vertical-align: middle;
-  z-index: 2;
+  outline: 0;
+}
+#app .search .search-input input:focus {
+  box-shadow: 0 0 5px 0 #007bff;
   position: relative;
+  border-color: #007bff;
 }
 #app .search .search-input button {
   flex-shrink: 0;
@@ -45,9 +49,6 @@ html, body {
   font-size: 16px;
   border-bottom-right-radius: 5px;
   background: #fff;
-  margin-left: -2px;
-  z-index: 1;
-  position: relative;
 }
 
 .search-list {
@@ -87,11 +88,16 @@ html, body {
   font-size: 12px;
 }
 .search-list .search-item a {
-  color: #007bff;
   text-decoration: none;
+}
+.search-list .search-item a:link {
+  color: #007bff;
 }
 .search-list .search-item a:hover {
   color: #ff6259;
+}
+.search-list .search-item a:visited {
+  color: #696565;
 }
 .search-list .search-item div {
   font-size: 15px;
