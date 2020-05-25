@@ -2,10 +2,10 @@
 
 var EventEmitter = require('events');
 var util = require('util');
-var net = require('net');
 
 var PeerQueue = require('./peer-queue');
-var Wire = require('./wire');
+const {fork} = require('child_process');
+const path = require('path');
 
 
 var BTClient = function(options) {
@@ -16,7 +16,14 @@ var BTClient = function(options) {
     this.activeConnections = 0;
     this.peers = new PeerQueue(this.maxConnections);
     this.on('download', this._download);
-
+    this.child = fork(path.resolve(__dirname, './child'), {windowsHide: true, serialization: 'advanced'});
+    this.child.on('message', args => {
+       if(args.type === 'complete') {
+           this.emit('complete', args.metadata, args.infoHash, args.rinfo);
+       } else if(args.type === 'next') {
+           this.next(args.infohash, args.successful);
+       }
+    });
     if (typeof options.ignore === 'function') {
         this.ignore = options.ignore;
     }
@@ -40,41 +47,18 @@ BTClient.prototype._next = function(infohash, successful) {
     }
 };
 
+BTClient.prototype.next = function(infohash, successful) {
+  this.activeConnections--;
+  this._next(infohash, successful);
+};
+
 BTClient.prototype._download = function(rinfo, infohash) {
     this.activeConnections++;
-
-    var successful = false;
-    var socket = new net.Socket();
-    socket.setTimeout(this.timeout);
-    socket.connect(rinfo.port, rinfo.address, function() {
-        var wire = new Wire(infohash);
-        socket.pipe(wire).pipe(socket);
-
-        wire.on('metadata', function(metadata, infoHash) {
-            successful = true;
-            this.emit('complete', metadata, infoHash, rinfo);
-            socket.destroy();
-        }.bind(this));
-
-        wire.on('fail', function() {
-            socket.destroy();
-        }.bind(this));
-
-        wire.sendHandshake();
-    }.bind(this));
-
-    socket.on('error', function(err) {
-        socket.destroy();
-    }.bind(this));
-
-    socket.on('timeout', function(err) {
-        socket.destroy();
-    }.bind(this));
-
-    socket.once('close', function() {
-        this.activeConnections--;
-        this._next(infohash, successful);
-    }.bind(this));
+    this.child.send({
+        rinfo,
+        infohash,
+        timeout: this.timeout
+    })
 };
 
 BTClient.prototype.add = function(rinfo, infohash) {

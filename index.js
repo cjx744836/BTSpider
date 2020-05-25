@@ -1,15 +1,13 @@
 'use strict';
 
 const BTClient = require('./src/btclient/btclient');
-const SPider = require('./src/spider/spider');
-const spider = new SPider();
 const btClient = new BTClient();
 const save = require('./src/mysql/index');
-const PORT = 6339;
+const child = require('child_process').fork('./src/spider/index', {windowsHide: true, serialization: 'advanced'});
 
-//使用未确定的infohash增加采集成功概率，因为确定的infohash也是来自未确定
-spider.on('unsure', (infohash, address) => {
-    btClient.add(address, infohash);
+
+child.on('message', ({infohash, address}) => {
+   btClient.add(address, infohash);
 });
 
 btClient.on('complete', (metadata, infohash, rinfo) => {
@@ -43,4 +41,3 @@ btClient.on('complete', (metadata, infohash, rinfo) => {
     }
 });
 
-spider.listen(PORT);
