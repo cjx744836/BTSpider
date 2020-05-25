@@ -45,7 +45,6 @@ BTClient.prototype._download = function(rinfo, infohash) {
 
     var successful = false;
     var socket = new net.Socket();
-
     socket.setTimeout(this.timeout);
     socket.connect(rinfo.port, rinfo.address, function() {
         var wire = new Wire(infohash);

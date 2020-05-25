@@ -7,8 +7,8 @@ const btClient = new BTClient();
 const save = require('./src/mysql/index');
 const PORT = 6339;
 
-
-spider.on('ensure', (infohash, address) => {
+//使用未确定的infohash增加采集成功概率，因为确定的infohash也是来自未确定
+spider.on('unsure', (infohash, address) => {
     btClient.add(address, infohash);
 });
 
