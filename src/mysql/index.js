@@ -34,13 +34,13 @@ function save(data) {
 
 function formatLength(len) {
     let t = len / 1024 / 1024 / 1024 / 1024;
-    let g = len / 1024 / 1024 / 1024;
-    let m = len / 1024 / 1024;
-    let k = len / 1024;
     if(t >= 1) return t.toFixed(2) + 'TB';
-    if(g >= 1) return g.toFixed(2) + 'GB';
-    if(m >= 1) return m.toFixed(2) + 'MB';
-    return k.toFixed(2) + 'KB';
+    t = len / 1024 / 1024 / 1024;
+    if(t >= 1) return t.toFixed(2) + 'GB';
+    t = len / 1024 / 1024;
+    if(t >= 1) return t.toFixed(2) + 'MB';
+    t = len / 1024;
+    return t.toFixed(2) + 'KB';
 }
 
 
