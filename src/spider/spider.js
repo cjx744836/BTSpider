@@ -108,7 +108,7 @@ class Spider extends Emiter {
                 token: this.token.token
             }
         }, address)
-        this.emit('unsure', infohash, address);
+        this.emit('hash', infohash, address);
     }
 
     onAnnouncePeerRequest(message, address) {
@@ -121,7 +121,7 @@ class Spider extends Emiter {
         if (!isValidPort(port)) return
 
         this.send({ t: tid, y: 'r', r: { id: Node.neighbor(id, this.table.id) } }, address)
-    	this.emit('ensure', infohash, {
+    	this.emit('hash', infohash, {
             address: address.address,
             port: port
         })
