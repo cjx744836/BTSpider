@@ -9,8 +9,7 @@ const Token = require('./token')
 const bootstraps = [
     {address: "router.bittorrent.com", port:6881},
     {address: "dht.transmissionbt.com", port:6881},
-    {address: "router.utorrent.com", port:6881},
-    {address: 'router.utorrent.com',port:6881},
+    {address: "router.utorrent.com", port:6881}
     ]
 
 function isValidPort(port) {
