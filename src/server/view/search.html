@@ -22,7 +22,7 @@
             </div>
         </div>
     </div>
-    <div class="page" v-if="">
+    <div class="page" v-if="list.length">
         <span :class="{disabled:page===1}" v-html="pager.prev"></span>
         <span :class="{disabled:page===1,active:page===1}" v-html="pager.first"></span>
         <span v-for="k in pageList" v-html="k.content" :class="{active:page===k.page}"></span>
